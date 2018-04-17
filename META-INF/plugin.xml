@@ -15,7 +15,7 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <idea-plugin>
-  <name>Quick Find Next Previous</name>
+  <name>Quick Find Plugin</name>
   <description>
     <![CDATA[
     A one-keystroke way to navigate to the next/previous occurrence of selected text (just like in Eclipse).

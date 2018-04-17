@@ -1,10 +1,10 @@
-## Quick Find
+## Quick Find Plugin
 
-> **Plugin for Intellij IDEA**
+> **for Intellij IDEA**
 
 A one-keystroke way to navigate to the next/previous occurrence of selected text (just like in Eclipse).
 
-Use Alt+G and Shift+Alt+G (or assign your own shortcuts in the Keymap settings) to navigate up and down to each identifier occurrence.
+Use Alt+G and Shift+Alt+G (or assign your own shortcuts in the Keymap settings) to navigate to the next and previous occurrences of the selected text.
 
 Ensure that these shortcuts are not mapped to other actions in the Keymap settings.
 
