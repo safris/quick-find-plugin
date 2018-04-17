@@ -1,0 +1,69 @@
+<!--
+  Copyright (c) 2018 Seva Safris
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  You should have received a copy of The MIT License (MIT) along with this
+  program. If not, see <http://opensource.org/licenses/MIT/>.
+-->
+<idea-plugin>
+  <name>Quick Find Next Previous</name>
+  <description>
+    <![CDATA[
+    A one-keystroke way to navigate to the next/previous occurrence of selected text (just like in Eclipse).
+    <br/>
+    Use Alt+G and Shift+Alt+G (or assign your own shortcuts in the Keymap settings) to navigate up and down to each identifier occurrence.
+    <br/>
+    Ensure that these shortcuts are not mapped to other actions in the Keymap settings.
+    <br/>
+    Source available at <a href="http://github.com/olegych/ih-reloaded">http://github.com/sevasafris/quick-find-plugin</a>.
+    ]]>
+  </description>
+  <version>1.0.0</version>
+  <vendor>Seva Safris</vendor>
+  <category>Navigation</category>
+  <idea-version since-build="8000"/>
+
+  <depends>com.intellij.modules.lang</depends>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <action id="QuickFindNextAction" class="org.safris.intellij.plugin.quickfind.QuickFindNextAction" text="Quick Find Next">
+      <keyboard-shortcut keymap="$default" first-keystroke="alt G"/>
+    </action>
+    <action id="QuickFindPreviousAction" class="org.safris.intellij.plugin.quickfind.QuickFindPreviousAction" text="Quick Find Previous">
+      <keyboard-shortcut keymap="$default" first-keystroke="shift alt G"/>
+    </action>
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <change-notes>
+    <![CDATA[
+    <ul>
+      <li>1.0.0
+        <ol>
+          <li>First release.</li>
+        </ol>
+      </li>
+    </ul>
+    ]]>
+  </change-notes>
+</idea-plugin>
