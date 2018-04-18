@@ -14,20 +14,20 @@
   You should have received a copy of The MIT License (MIT) along with this
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
-<idea-plugin>
+<idea-plugin url="http://plugins.jetbrains.com/plugin/10635-quick-find-plugin">
   <name>Quick Find Plugin</name>
   <description>
     <![CDATA[
     A one-keystroke way to navigate to the next/previous occurrence of selected text (just like in Eclipse).
     <br/>
-    Use Alt+G and Shift+Alt+G (or assign your own shortcuts in the Keymap settings) to navigate up and down to each identifier occurrence.
+    Use Alt+G and Shift+Alt+G (or assign your own shortcuts in the Keymap settings) to navigate to each next and previous occurrence of the selected text.
     <br/>
     Ensure that these shortcuts are not mapped to other actions in the Keymap settings.
     <br/>
-    Source available at <a href="http://github.com/olegych/ih-reloaded">http://github.com/sevasafris/quick-find-plugin</a>.
+    Source available at <a href="http://github.com/sevasafris/quick-find-plugin">http://github.com/sevasafris/quick-find-plugin</a>.
     ]]>
   </description>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <vendor>Seva Safris</vendor>
   <category>Navigation</category>
   <idea-version since-build="8000"/>
@@ -58,6 +58,11 @@
   <change-notes>
     <![CDATA[
     <ul>
+      <li>1.0.1
+        <ol>
+          <li>Update metadata.</li>
+        </ol>
+      </li>
       <li>1.0.0
         <ol>
           <li>First release.</li>
