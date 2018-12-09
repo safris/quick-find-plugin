@@ -16,14 +16,18 @@
 
 package org.safris.intellij.plugin.quickfind;
 
-import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.codeInsight.highlighting.HighlightManagerImpl;
+import com.intellij.find.FindManager;
+import com.intellij.find.impl.FindManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
+import com.intellij.openapi.editor.event.CaretEvent;
+import com.intellij.openapi.editor.event.CaretListener;
 import com.intellij.openapi.editor.event.SelectionEvent;
 import com.intellij.openapi.editor.event.SelectionListener;
 import com.intellij.openapi.project.Project;
@@ -33,13 +37,20 @@ abstract class QuickFindAction extends AnAction {
     e.getActionManager().getAction(navigationActionId).actionPerformed(e);
   }
 
-  private final String navigationActionId;
-  private SelectionListener selectionListener;
-  private int start;
-  private int end;
+  private static void setSelectionToCaret(final SelectionModel selectionModel, final Caret caret) {
+    selectionModel.setSelection(caret.getOffset() - currentSelection.length(), caret.getOffset());
+  }
 
-  public QuickFindAction(final String navigationActionId) {
-    this.navigationActionId = navigationActionId;
+  private static volatile AnAction currentAction;
+  private static volatile String currentSelection;
+  private static SelectionListener selectionListener;
+
+  private final String actionId;
+  private CaretListener caretListener;
+  private static boolean inCaret = false;
+
+  QuickFindAction(final String actionId) {
+    this.actionId = actionId;
   }
 
   @Override
@@ -49,32 +60,59 @@ abstract class QuickFindAction extends AnAction {
       return;
 
     final SelectionModel selectionModel = editor.getSelectionModel();
-    if (selectionModel.getSelectionStart() == selectionModel.getSelectionEnd())
+    if (selectionModel.getSelectionStart() == selectionModel.getSelectionEnd()) {
+      invokeAction(e, actionId);
       return;
-
-    if (selectionListener == null) {
-      selectionModel.addSelectionListener(selectionListener = new SelectionListener() {
-        @Override
-        public void selectionChanged(final SelectionEvent se) {
-          if (se.getOldRange().getStartOffset() == start && se.getOldRange().getEndOffset() == end && se.getNewRange().getLength() == 0 && (se.getOldRange().getStartOffset() == se.getNewRange().getStartOffset() || se.getOldRange().getEndOffset() == se.getNewRange().getEndOffset())) {
-            selectionModel.setSelection(start, end);
-            start = -1;
-            end = -1;
-          }
-        }
-      });
     }
 
     final Project project = e.getProject();
     if (project == null)
       return;
 
-    start = selectionModel.getSelectionStart();
-    end = selectionModel.getSelectionEnd();
+    if (caretListener == null) {
+      editor.getCaretModel().addCaretListener(caretListener = new CaretListener() {
+        @Override
+        public void caretPositionChanged(final CaretEvent event) {
+//          System.err.println("caretPositionChanged(from: " + event.getOldPosition() + ", to: " + event.getNewPosition() + ", selectionStart: " + selectionModel.getSelectionStart() + ")");
+          if (currentAction != QuickFindAction.this)
+            return;
 
-    ((HighlightManagerImpl)HighlightManager.getInstance(project)).hideHighlights(editor, HighlightManager.HIDE_BY_ESCAPE | HighlightManager.HIDE_BY_ANY_KEY);
-    invokeAction(e, IdeActions.ACTION_EDITOR_ESCAPE);
-    invokeAction(e, IdeActions.ACTION_HIGHLIGHT_USAGES_IN_FILE);
-    invokeAction(e, navigationActionId);
+          inCaret = true;
+          setSelectionToCaret(selectionModel, event.getCaret());
+          inCaret = false;
+        }
+      });
+    }
+
+    if (selectionListener == null) {
+      selectionModel.addSelectionListener(selectionListener = new SelectionListener() {
+        @Override
+        public void selectionChanged(final SelectionEvent se) {
+          if (currentAction == null || !inCaret)
+            return;
+
+          final CaretModel caretModel = editor.getCaretModel();
+//          System.err.println("Selection offset: " + selectionModel.getLeadSelectionOffset() + ", Caret offset: " + caretModel.getOffset());
+          currentAction = null;
+          if (selectionModel.hasSelection() && caretModel.isUpToDate() && caretModel.getOffset() != selectionModel.getSelectionStart() && caretModel.getOffset() != selectionModel.getSelectionEnd())
+            setSelectionToCaret(selectionModel, caretModel.getCurrentCaret());
+        }
+      });
+    }
+
+    final String selection = selectionModel.getSelectedText();
+//    System.err.println("actionPerformed(" + selectionModel.getSelectedText() + ", " + selectionModel.getSelectionEnd() + "): \"" + selection + "\"");
+    if (currentSelection == null || !currentSelection.equals(selection)) {
+      currentSelection = selection;
+
+      // This is necessary to allow for the first action to actually move the cursor+selection
+      ((FindManagerImpl)FindManager.getInstance(project)).setFindWasPerformed();
+
+      invokeAction(e, IdeActions.ACTION_FIND);
+      invokeAction(e, IdeActions.ACTION_HIGHLIGHT_USAGES_IN_FILE);
+    }
+
+    currentAction = this;
+    invokeAction(e, actionId);
   }
 }

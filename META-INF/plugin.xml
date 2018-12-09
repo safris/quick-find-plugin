@@ -27,7 +27,7 @@
     Source available at <a href="http://github.com/sevasafris/quick-find-plugin">http://github.com/sevasafris/quick-find-plugin</a>.
     ]]>
   </description>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <vendor>Seva Safris</vendor>
   <category>Navigation</category>
   <idea-version since-build="8000"/>
@@ -58,6 +58,14 @@
   <change-notes>
     <![CDATA[
     <ul>
+      <li>1.1.0
+        <ol>
+          <li>Find using prior search string if selection is unset.</li>
+          <li>Support find next/previous with Find dialog showing, and not.</li>
+          <li>Init FileManager to immediately find next/previous on first use.</li>
+          <li>Improve performance and assert deterministic behavior.</li>
+        </ol>
+      </li>
       <li>1.0.1
         <ol>
           <li>Update metadata.</li>
