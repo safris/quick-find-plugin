@@ -17,7 +17,6 @@
 package org.safris.intellij.plugin.quickfind;
 
 import com.intellij.find.FindManager;
-import com.intellij.find.impl.FindManagerImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.IdeActions;
@@ -100,13 +99,13 @@ abstract class QuickFindAction extends AnAction {
       });
     }
 
+    // This is necessary to allow for the first action to actually move the cursor+selection
+    FindManager.getInstance(project).setFindWasPerformed();
+
     final String selection = selectionModel.getSelectedText();
 //    System.err.println("actionPerformed(" + selectionModel.getSelectedText() + ", " + selectionModel.getSelectionEnd() + "): \"" + selection + "\"");
     if (currentSelection == null || !currentSelection.equals(selection)) {
       currentSelection = selection;
-
-      // This is necessary to allow for the first action to actually move the cursor+selection
-      ((FindManagerImpl)FindManager.getInstance(project)).setFindWasPerformed();
 
       invokeAction(e, IdeActions.ACTION_FIND);
       invokeAction(e, IdeActions.ACTION_HIGHLIGHT_USAGES_IN_FILE);

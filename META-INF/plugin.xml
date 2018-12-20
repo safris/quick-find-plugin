@@ -15,7 +15,8 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <idea-plugin url="http://plugins.jetbrains.com/plugin/10635-quick-find-plugin">
-  <name>Quick Find Plugin</name>
+  <id>Quick Find Plugin</id>
+  <name>Quick Find</name>
   <description>
     <![CDATA[
     A one-keystroke way to navigate to the next/previous occurrence of selected text (just like in Eclipse).
@@ -30,7 +31,7 @@
   <version>1.1.0</version>
   <vendor>Seva Safris</vendor>
   <category>Navigation</category>
-  <idea-version since-build="8000"/>
+  <idea-version since-build="172"/>
 
   <depends>com.intellij.modules.lang</depends>
 
