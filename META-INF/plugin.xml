@@ -25,7 +25,7 @@
     <br/>
     Ensure that these shortcuts are not mapped to other actions in the Keymap settings.
     <br/>
-    Source available at <a href="http://github.com/sevasafris/quick-find-plugin">http://github.com/sevasafris/quick-find-plugin</a>.
+    Source available at <a href="http://github.com/safris/quick-find-plugin">http://github.com/safris/quick-find-plugin</a>.
     ]]>
   </description>
   <version>1.1.0</version>
